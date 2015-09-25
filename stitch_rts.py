@@ -74,7 +74,6 @@ for cluster, feat_id in zip(clusterList, range(len(clusterList))):
 	
 	outputGtf.write('\t'.join([featureChrom,source,feature,featureStart,featureEnd,'.',featureStrand,'.','feat_id:"%d"; type:"stitched_retrotransposon"' % feat_id])+"\n")
 	for section, sectionNum in zip(cluster, range(len(cluster))):
-		print(section["type"])
 		outputGtf.write('\t'.join([section['chrom'],source,feature,str(section["start"]),str(section["end"]),'.',section["strand"],'.','feat_id:"%d"; type:"%s"' % (feat_id, section["type"])]))
 		if (sectionNum != len(cluster)) and (feat_id != len(clusterList)):
 			outputGtf.write("\n")
