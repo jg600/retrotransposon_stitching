@@ -18,7 +18,7 @@ countMatrix = {name:{name:0 for name in (uniqNames+["NONE"])} for name in uniqNa
 print("Done")
 print("Counting lines in BED file ..."),
 numLines = int(subprocess.Popen("wc -l %s | awk '{print $1}'" % sys.argv[1], shell = True, stdout = subprocess.PIPE).stdout.read())
-print("Done)
+print("Done")
 n = 1
 print("Starting to get overlaps ..."),
 while n <= numLines:
