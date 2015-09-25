@@ -17,7 +17,7 @@ countMatrix = {name:{name:0 for name in (uniqNames+["NONE"])} for name in uniqNa
 numLines = int(subprocess.Popen("wc -l %s | awk '{print $1}'" % sys.argv[1], shell = True, stdout = subprocess.PIPE).stdout.read())
 
 n = 1
-
+print("Starting to get overlaps ..."),
 while n <= numLines:
 	baseLineList = re.split(re.compile('\s+'), linecache.getline(regionBedFileName, n).strip())
 	baseDict = {'chrom':baseLineList[0], 'start':int(baseLineList[1]), 'end':int(baseLineList[2]), 'name':baseLineList[3]}
@@ -67,8 +67,8 @@ while n <= numLines:
 		countMatrix[baseDict['name']]['NONE'] += 1
 	n += 1#
 
-print(json.dumps(countMatrix, sort_keys = True, indent = 4, separators = (',', ':')))
-	
+#print(json.dumps(countMatrix, sort_keys = True, indent = 4, separators = (',', ':')))
+print("Count matrix finished")	
 
 '''
 rowNames = countMatrix.keys()
@@ -88,14 +88,16 @@ plt.show()
 
 #Now we have made the matrix of counts, we want to normalise it by the number of occurrences of
 #each classification, so divide each element by the total of its row
-
+print("Normalising counts ..."),
 normedCounts = {rowName:{} for rowName in countMatrix.keys()}
 
 for rowName in countMatrix.keys():
 	rowSum = float(sum(countMatrix[rowName].values()))
 	normedCounts[rowName] = {colName:countMatrix[rowName][colName]/rowSum for colName in countMatrix[rowName].keys()}
+print("Done")
 
-print(json.dumps(normedCounts, sort_keys = True, indent = 4, separators = (',', ':')))
+with open("json_dump", 'w') as f:
+	f.write(json.dumps(normedCounts, sort_keys = True, indent = 4, separators = (',', ':')))
 
 
 
