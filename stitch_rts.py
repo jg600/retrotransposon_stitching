@@ -8,12 +8,17 @@ jsonFile = open(sys.argv[3], 'r')
 maxGap = int(sys.argv[4])
 outputGtf = open(sys.argv[5], 'wa')
 
+print("Loading json file ..."),
 probMatrix = json.load(jsonFile)
+print("Done")
 
 clusterList = []
 
+print("Counting number of lines in BED file ..."),
 numLines = int(subprocess.Popen("wc -l %s | awk '{print $1}'" % sys.argv[1], shell = True, stdout = subprocess.PIPE).stdout.read())
+print("Done")
 
+print("Starting to create clusters ...")
 n = 1
 while n <= numLines:
 	print("n=%d" % n)
@@ -26,7 +31,6 @@ while n <= numLines:
 	next = n
 	while keepGoing and (next < numLines):
 		next += 1
-		print("next=%d" % next)
 		nextLine = re.split(re.compile('\s+'), linecache.getline(regionBedFileName, next).strip())
 		nextDict = {'chrom':nextLine[0], 'start':int(nextLine[1]), 'end':int(nextLine[2]), 'name':nextLine[3], 'strand':startLine[4]}
 		nextDict["family"], nextDict["type"] = nextLine[3].split("/")
@@ -51,8 +55,9 @@ while n <= numLines:
 		break
 	n = next
 	clusterList.append(cluster)
+print("Clusters finished")
 
-print(clusterList)
+print("Writing results to GTF file ..."),
 for cluster, feat_id in zip(clusterList, range(len(clusterList))):
 	featureChrom = list(set([rt['chrom'] for rt in cluster]))[0]
 	source = "RepeatMasker"
@@ -73,6 +78,8 @@ for cluster, feat_id in zip(clusterList, range(len(clusterList))):
 		outputGtf.write('\t'.join([section['chrom'],source,feature,str(section["start"]),str(section["end"]),'.',section["strand"],'.','feat_id:"%d"; type:"%s"' % (feat_id, section["type"])]))
 		if (sectionNum != len(cluster)) and (feat_id != len(clusterList)):
 			outputGtf.write("\n")
+
+print("Done")
 
 
 
