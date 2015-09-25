@@ -13,10 +13,12 @@ uniqNames = []
 for name in uniqNamesFile:
 	uniqNames.append(name.strip())
 print("Done")
+print("Initialising matrix of counts ..."),
 countMatrix = {name:{name:0 for name in (uniqNames+["NONE"])} for name in uniqNames}
-
+print("Done")
+print("Counting lines in BED file ..."),
 numLines = int(subprocess.Popen("wc -l %s | awk '{print $1}'" % sys.argv[1], shell = True, stdout = subprocess.PIPE).stdout.read())
-
+print("Done)
 n = 1
 print("Starting to get overlaps ..."),
 while n <= numLines:
