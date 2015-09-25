@@ -2,3 +2,6 @@ make_rep_matrix.py~
 mm10.RepeatMasker.retrotransposons.names
 repeats.test.bed
 repeats.test.names
+json_dump
+out.gtf
+stitch_rts.py~
