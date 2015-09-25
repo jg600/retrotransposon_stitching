@@ -7,11 +7,12 @@ regionBedFileName = sys.argv[1]
 uniqNamesFile = open(sys.argv[2], 'r')
 maxGap = int(sys.argv[3])
 
+print("Getting unique names ..."),
 uniqNames = []
 
 for name in uniqNamesFile:
 	uniqNames.append(name.strip())
-
+print("Done")
 countMatrix = {name:{name:0 for name in (uniqNames+["NONE"])} for name in uniqNames}
 
 numLines = int(subprocess.Popen("wc -l %s | awk '{print $1}'" % sys.argv[1], shell = True, stdout = subprocess.PIPE).stdout.read())
