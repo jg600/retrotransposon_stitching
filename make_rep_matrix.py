@@ -13,15 +13,32 @@ uniqNames = []
 for name in uniqNamesFile:
 	uniqNames.append(name.strip())
 print("Done")
+
 print("Initialising matrix of counts ..."),
 countMatrix = {name:{name:0 for name in (uniqNames+["NONE"])} for name in uniqNames}
 print("Done")
+
 print("Counting lines in BED file ..."),
 numLines = int(subprocess.Popen("wc -l %s | awk '{print $1}'" % sys.argv[1], shell = True, stdout = subprocess.PIPE).stdout.read())
 print("Done")
+
 n = 1
-print("Starting to get overlaps ..."),
-while n <= numLines:
+print("Starting to get overlaps ...")
+sys.stdout.flush()
+
+print('['+' '*50+']'),
+print('\r'),
+percent = 0.0
+i = 0.0
+
+for n in range(1,numLines+1):
+
+	percent = 100.0*(n/numLines)
+	numBars = int(floor(percent/2))
+	print('\r'),
+	print('['+'|'*numBars+' '*(50-numBars)+']'),
+	sys.stdout.flush()
+
 	baseLineList = re.split(re.compile('\s+'), linecache.getline(regionBedFileName, n).strip())
 	baseDict = {'chrom':baseLineList[0], 'start':int(baseLineList[1]), 'end':int(baseLineList[2]), 'name':baseLineList[3]}
 	
@@ -68,10 +85,9 @@ while n <= numLines:
 
 	if total == 0:
 		countMatrix[baseDict['name']]['NONE'] += 1
-	n += 1#
 
 #print(json.dumps(countMatrix, sort_keys = True, indent = 4, separators = (',', ':')))
-print("Count matrix finished")	
+print("\nCount matrix finished")	
 
 '''
 rowNames = countMatrix.keys()
