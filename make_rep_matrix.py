@@ -1,11 +1,18 @@
 import sys, re, subprocess, linecache, json
 from math import *
-import numpy as np
+#import numpy as np
 import matplotlib.pyplot as plt
 
 regionBedFileName = sys.argv[1]
 uniqNamesFile = open(sys.argv[2], 'r')
 maxGap = int(sys.argv[3])
+'''
+try:
+	jsonResults = sys.argv[4]
+	foundJson = True
+except IndexError:
+	foundJson = False
+'''
 
 print("Getting unique names ..."),
 uniqNames = []
@@ -117,6 +124,8 @@ print("Done")
 
 with open("json_dump", 'w') as f:
 	f.write(json.dumps(normedCounts, sort_keys = True, indent = 4, separators = (',', ':')))
+
+
 
 
 
