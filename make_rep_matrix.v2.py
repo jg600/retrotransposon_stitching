@@ -57,26 +57,7 @@ for n in range(1,numLines+1):
 					keepGoing = False
 				else:
 					countMatrix[baseDict['name']][newDict['name']] += 1
-					total += 1
-		else:
-			keepGoing = False
-	
-	behind = n
-	keepGoing = True
-
-	while keepGoing:
-		behind -= 1
-		if behind >= 1:
-			newLineList = re.split(re.compile('\s+'), linecache.getline(regionBedFileName, behind).strip())
-			newDict = {'chrom':newLineList[0], 'start':int(newLineList[1]), 'end':int(newLineList[2]), 'name':newLineList[3]}
-		
-			if newDict['chrom'] != baseDict['chrom']:
-				keepGoing = False
-			else:
-				if newDict['end'] < baseDict['start'] - 100:
-					keepGoing = False
-				else:
-					countMatrix[baseDict['name']][newDict['name']] += 1
+					countMatrix[newDict['name']][baseDict['name']] += 1
 					total += 1
 		else:
 			keepGoing = False
@@ -84,24 +65,7 @@ for n in range(1,numLines+1):
 	if total == 0:
 		countMatrix[baseDict['name']]['NONE'] += 1
 
-#print(json.dumps(countMatrix, sort_keys = True, indent = 4, separators = (',', ':')))
 print("\nCount matrix finished")	
-
-'''
-rowNames = countMatrix.keys()
-rowNames.sort()
-colNames = rowNames + ['NONE']
-
-fig = plt.figure()
-ax = fig.add_subplot(111)
-
-for i in range(len(rowNames)):
-	for j in range(len(colNames)):
-		count = countMatrix[rowNames[i]][colNames[j]]
-		plt.plot(i,j,marker = 's', color = str(1-(count/10.0)), linewidth = 0, markersize = 10)
-ax.set_aspect('equal')
-plt.show()
-'''
 
 #Now we have made the matrix of counts, we want to normalise it by the number of occurrences of
 #each classification, so divide each element by the total of its row
